@@ -1,4 +1,5 @@
 package org.yukhymenko.giphy;
+import org.apache.commons.exec.util.StringUtils;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -36,6 +37,20 @@ public class GiphyTest extends TestBase {
         singleGifPage.assertPageOpened();
         String openedGifName = singleGifPage.getNameOfTheGif();
         Assert.assertEquals(gifNameOnHomePage, openedGifName, "Clicked gif and opened gif are not the same");
+    }
+
+    @Test(priority = 4)
+    public void checkGifIdSameAsCopiedLinkGifID(){
+        boolean result = homePage.isTrendingSectionExists();
+        Assert.assertTrue(result, "Trending section doesn't exist. ");
+        homePage.clickOnFirstTrendingGif();
+        singleGifPage.assertPageOpened();
+        String gifId = singleGifPage.getGifId();
+        singleGifPage.clickOnShareButton();
+        singleGifPage.clickOnCopyGifLinkButton();
+        singleGifPage.goToClipboardContent();
+        String gifIdCopiedLink = singleGifPage.getGifIdCopiedLink();
+        Assert.assertEquals(gifId,gifIdCopiedLink, "ID is not the same. ");
     }
 
 }
